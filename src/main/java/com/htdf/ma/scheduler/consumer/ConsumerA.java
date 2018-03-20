@@ -10,8 +10,11 @@ import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 
 import com.hifly.db.Db;
+import com.zxe.cimiss.pasom.RealTimeDataReport;
+import com.zxe.cimiss.pasom.RealTimeDataReportArea;
 import com.zxe.cimiss.pasom.asm.RealTimeDataReportAsm;
 import com.zxe.cimiss.pasom.asm.RealTimeHourAsmData;
+import com.zxe.cimiss.pasom.lradar.RealTimeDataReportLRadar;
 import com.zxe.cimiss.pasom.lradar.RealTimeHourLRadarData;
 import com.zxe.cimiss.pasom.lradar.RealTimeLRadarInfoData;
 import com.zxe.cimiss.pasom.station.RealTimeAreaStation;
@@ -63,6 +66,22 @@ public class ConsumerA {
 		}
 	}
 	
+	@JmsListener(destination="NAWS_REPORT")
+	public void processMessageNAWSREPORT(String content){
+		if(content.equals("ON")){
+			logger.info("国家自动站初始化接受消息，开始执行。");
+			try {
+				RealTimeDataReport nawsreport= new RealTimeDataReport();
+				nawsreport.setDb(db);
+				nawsreport.parse(null);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			logger.info("国家自动站初始化接受消息，执行结束。");
+		}
+	}
+	
 	@JmsListener(destination="NAWS_24")
 	public void processMessageNAWS_24(String content){
 		if(content.equals("ON")){
@@ -95,6 +114,22 @@ public class ConsumerA {
 		}
 	}
 	
+	@JmsListener(destination="RAWS_REPORT")
+	public void processMessageRAWSREPORT(String content){
+		if(content.equals("ON")){
+			logger.info("区域自动站初始化接受消息，开始执行。");
+			try {
+				RealTimeDataReportArea rawsreport = new RealTimeDataReportArea();
+				rawsreport.setDb(db);
+				rawsreport.parse(null);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			logger.info("区域自动站初始化接受消息，执行结束。");
+		}
+	}
+	
 	@JmsListener(destination="RAWS_24")
 	public void processMessageRAWS_24(String content){
 		if(content.equals("ON")){
@@ -123,6 +158,22 @@ public class ConsumerA {
 				e.printStackTrace();
 			}
 			logger.info("探空雷达站解析接受消息，执行结束。");
+		}
+	}
+	
+	@JmsListener(destination="LRADAR_REPORT")
+	public void processMessageLRADARREPORT(String content){
+		if(content.equals("ON")){
+			logger.info("探空雷达站初始化接受消息，开始执行。");
+			try {
+				RealTimeDataReportLRadar lradar = new RealTimeDataReportLRadar();
+				lradar.setDb(db);
+				lradar.parse(null);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			logger.info("探空雷达站初始化接受消息，执行结束。");
 		}
 	}
 	
